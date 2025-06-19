@@ -16,7 +16,8 @@ st.set_page_config(
 st.title("A Snapshot of Long Beach, California's Climate")
 st.subheader(
     """
-    Exploring 75 years of historical weather data (1949-2024)
+    Exploring 75 Years of Historical Weather Data (1949–2024) from NOAA
+
     ---
     """
 )
@@ -132,8 +133,8 @@ monthly_avg_precip = duckdb.query("""
     ORDER BY Month                                                                                                                                   
     """).to_df()
 
-# Convert numeric month to full month name
-monthly_avg_precip["Month"] = monthly_avg_precip["Month"].apply(lambda x: calendar.month_name[int(x)])
+# Convert numeric month to abv month name
+monthly_avg_precip["Month"] = monthly_avg_precip["Month"].apply(lambda x: calendar.month_abbr[int(x)])
 
 # Assign custom colors based on precipitation thresholds
 def get_precip_color(value):
@@ -360,3 +361,9 @@ with col2:
         for i, row in wettest_months.iterrows():
             style = last_entry_style if i == len(wettest_months) - 1 else entry_style
             st.markdown(f"<div style='{style}'><span>{row['Date']}</span><span>{row['PRCP']}</span></div>", unsafe_allow_html=True)
+
+st.markdown("---")
+st.markdown(
+    "**Data Source:** [NOAA Past Weather for Long Beach, CA](https://www.ncei.noaa.gov/access/past-weather/Long%20Beach)",
+    unsafe_allow_html=True
+)
